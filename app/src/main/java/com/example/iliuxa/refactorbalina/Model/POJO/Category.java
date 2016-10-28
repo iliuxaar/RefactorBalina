@@ -1,4 +1,4 @@
-package com.example.iliuxa.refactorbalina.Model;
+package com.example.iliuxa.refactorbalina.Model.POJO;
 
 import com.google.gson.annotations.SerializedName;
 
