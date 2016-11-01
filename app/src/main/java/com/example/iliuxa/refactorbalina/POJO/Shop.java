@@ -1,4 +1,4 @@
-package com.example.iliuxa.refactorbalina.Model.POJO;
+package com.example.iliuxa.refactorbalina.pojo;
 
 import java.util.ArrayList;
 

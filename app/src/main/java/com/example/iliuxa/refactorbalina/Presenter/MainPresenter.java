@@ -1,12 +1,9 @@
-package com.example.iliuxa.refactorbalina;
+package com.example.iliuxa.refactorbalina.presenter;
 
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
 
-import com.example.iliuxa.refactorbalina.Model.POJO.Yml_catalog;
+import com.example.iliuxa.refactorbalina.pojo.Yml_catalog;
+import com.example.iliuxa.refactorbalina.view.MainActivityView;
 import com.stanfy.gsonxml.GsonXml;
 import com.stanfy.gsonxml.GsonXmlBuilder;
 import com.stanfy.gsonxml.XmlParserCreator;
@@ -20,22 +17,30 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainPresenter implements MyPresenter{
+    MainActivityView view;
+    DataBase dataBase;
+    Yml_catalog catalog;
 
-    private Button button;
+    public MainPresenter(MainActivityView view){
+        this.view = view;
+    }
+
+
+    public void saveData(){
+        DownloadDataBase test = new DownloadDataBase();
+        test.execute();
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        button = (Button)findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DownloadDataBase test = new DownloadDataBase();
-                test.execute();
-            }
-        });
+    public void setItemsList() {
+        view.showData(catalog);
+    }
+
+    @Override
+    public void createNewWindow() {
+
     }
 
     private String getHttpRequest(String path) throws IOException {
@@ -47,11 +52,10 @@ public class MainActivity extends AppCompatActivity {
         return response.body().string();
     }
 
-    public class DownloadDataBase extends AsyncTask<Void,Void,Void> {
+    private class DownloadDataBase extends AsyncTask<Void,Void,Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Yml_catalog catalog;
             XmlParserCreator parserCreator = new XmlParserCreator() {
                 @Override
                 public XmlPullParser createParser() {
@@ -68,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
                     .create();
             try {
                 catalog = gsonXml.fromXml(
-                        getHttpRequest("http://ufa.farfor.ru/getyml/?key=ukAXxeJYZN"),
-                Yml_catalog.class);
-                catalog.getClass();
+                        getHttpRequest("http://ufa.farfor.ru/getyml/?key=ukAXxeJYZN")
+                        , Yml_catalog.class);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -78,8 +82,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPreExecute() {
-                button.setText("Blala");
+        protected void onPreExecute()   {
         }
 
         @Override

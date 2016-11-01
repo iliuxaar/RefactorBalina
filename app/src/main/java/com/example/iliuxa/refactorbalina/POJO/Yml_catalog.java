@@ -1,4 +1,4 @@
-package com.example.iliuxa.refactorbalina.Model.POJO;
+package com.example.iliuxa.refactorbalina.pojo;
 
 /**
  * Created by Iliuxa on 28.10.16.
