@@ -19,7 +19,7 @@ import java.sql.SQLException;
  */
 
 public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
-    private static final String TAG = DataBaseHelper.class.getSimpleName();
+    public static final String TAG = DataBaseHelper.class.getSimpleName();
     private static final String DATABASE_NAME = "shop.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -57,11 +57,15 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
     }
 
     //Singleton for OfferDao
-    public OfferDao getDishDAO()throws SQLException{
+    public OfferDao getOfferDAO()throws SQLException{
         if(offerDao == null){
             offerDao = new OfferDao(getConnectionSource(), Offer.class);
         }
         return offerDao;
+    }
+
+    public boolean isDataBaseEmpty()throws SQLException{
+        return getCategoryDAO().getAllCategories().size() == 0 || getOfferDAO().getAllOffers().size() == 0;
     }
 
     @Override

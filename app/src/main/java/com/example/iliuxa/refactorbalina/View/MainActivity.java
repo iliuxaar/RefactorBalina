@@ -19,7 +19,6 @@ import java.util.List;
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity implements MainActivityView {
 
-    private RecyclerView categoriesList;
     final MainPresenter presenter = new MainPresenter(this);;
 
     @ViewById(R.id.categoriesList)
@@ -32,9 +31,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
 
     @Override
     public void showDataInGrid(List data) {
+        //RecyclerView test = (RecyclerView)findViewById(R.id.categoriesList);
         MyAdapter adapter = new MyAdapter(R.layout.simple_category_list_item, (ArrayList)data);
-        categoriesList.setAdapter(adapter);
-        categoriesList.setLayoutManager(new GridLayoutManager(this,2));
+        mCategoriesList.setAdapter(adapter);
+        mCategoriesList.setLayoutManager(new GridLayoutManager(this,2));
     }
 
     @Override

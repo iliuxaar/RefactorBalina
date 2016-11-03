@@ -5,6 +5,7 @@ import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -20,5 +21,15 @@ public class CategoryDao extends BaseDaoImpl<Category,Integer>{
 
     public List<Category> getAllCategories()throws SQLException{
         return this.queryForAll();
+    }
+
+    public int createWithCheck(Collection<Category> datas) throws SQLException {
+        for(Category data:datas){
+            Category category = this.queryForId(data.getIdCategory());
+            if(category == null){
+                this.create(data);
+            }
+        }
+        return 0;
     }
 }

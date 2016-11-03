@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.iliuxa.refactorbalina.R;
+import com.example.iliuxa.refactorbalina.pojo.Category;
 
 import java.util.ArrayList;
 
@@ -72,7 +73,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         @Override
         public void bind(Object data) {
-
+            mCategoryName.setText(((Category)data).getName());
         }
     }
 

@@ -1,8 +1,11 @@
 package com.example.iliuxa.refactorbalina.presenter;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
+import com.example.iliuxa.refactorbalina.application.MyApplication;
 import com.example.iliuxa.refactorbalina.model.DataBase;
+import com.example.iliuxa.refactorbalina.model.HelperFactory;
 import com.example.iliuxa.refactorbalina.pojo.Yml_catalog;
 import com.example.iliuxa.refactorbalina.view.MainActivityView;
 import com.stanfy.gsonxml.GsonXml;
@@ -10,9 +13,11 @@ import com.stanfy.gsonxml.GsonXmlBuilder;
 import com.stanfy.gsonxml.XmlParserCreator;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,8 +41,8 @@ public class MainPresenter implements MyPresenter{
 
 
     @Override
-    public void setItemsList() {
-        //view.showDataInGrid(dataBase.getCategoriesList());
+    public void setItemsList() throws SQLException{
+        view.showDataInGrid(HelperFactory.getHelper().getCategoryDAO().getAllCategories());
     }
 
     @Override
@@ -54,34 +59,41 @@ public class MainPresenter implements MyPresenter{
         return response.body().string();
     }
 
-    private class DownloadDataBase extends AsyncTask<Void,Void,Void> {
+    private XmlParserCreator getXmlPullParser(){
+        XmlParserCreator parserCreator = new XmlParserCreator() {
+            @Override
+            public XmlPullParser createParser() {
+                try {
+                    return XmlPullParserFactory.newInstance().newPullParser();
+                } catch (XmlPullParserException e) {
+                    Log.e(MyApplication.TAG, "Xml Parser Exeption");
+                        throw new RuntimeException(e);
+                }
+            }
+        };
+        return parserCreator;
+    }
+
+    private class DownloadDataBase extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            XmlParserCreator parserCreator = new XmlParserCreator() {
-                @Override
-                public XmlPullParser createParser() {
-                    try {
-                        return XmlPullParserFactory.newInstance().newPullParser();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            };
-
-            GsonXml gsonXml = new GsonXmlBuilder()
-                    .setXmlParserCreator(parserCreator)
-                    .create();
             try {
-                catalog = gsonXml.fromXml(
-                        getHttpRequest("http://ufa.farfor.ru/getyml/?key=ukAXxeJYZN")
-                        , Yml_catalog.class);
-                //dataBase.saveCategoriesToDataBase(catalog.getShop().getCategories());
-                //dataBase.saveDishesToDataBase(catalog.getShop().getOffers());
-                catalog.getClass();
-
+                if (HelperFactory.getHelper().isDataBaseEmpty()) {
+                    GsonXml gsonXml = new GsonXmlBuilder()
+                            .setXmlParserCreator(getXmlPullParser())
+                            .create();
+                    catalog = gsonXml
+                            .fromXml(getHttpRequest("http://ufa.farfor.ru/getyml/?key=ukAXxeJYZN"), Yml_catalog.class);
+                    HelperFactory.getHelper().getCategoryDAO().createWithCheck(catalog.getShop().getCategories());
+                    HelperFactory.getHelper().getOfferDAO().createWithCheck(catalog.getShop().getOffers());
+                }else return null;
+            } catch (SQLException e) {
+                Log.e(MyApplication.TAG, "Error with database");
+                throw new RuntimeException();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(MyApplication.TAG, "Parce Error");
+                throw new RuntimeException();
             }
             return null;
         }
@@ -91,8 +103,12 @@ public class MainPresenter implements MyPresenter{
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-
+        protected void onPostExecute(Void Void) {
+            try {
+                setItemsList();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

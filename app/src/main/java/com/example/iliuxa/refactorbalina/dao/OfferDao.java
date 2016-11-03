@@ -7,6 +7,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,6 +24,20 @@ public class OfferDao extends BaseDaoImpl<Offer,Integer> {
         queryBuilder.where().eq(Offer.OFFER_COLUMN_CATEGORY_ID,categoryId);
         PreparedQuery<Offer> preparedQuery = queryBuilder.prepare();
         return query(preparedQuery);
+    }
+
+    public List<Offer> getAllOffers()throws SQLException{
+        return this.queryForAll();
+    }
+
+    public int createWithCheck(Collection<Offer> datas) throws SQLException {
+        for(Offer data:datas){
+            Offer offer = this.queryForId(data.getId());
+            if(offer == null){
+                this.create(data);
+            }
+        }
+        return 0;
     }
 
 }

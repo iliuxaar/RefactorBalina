@@ -8,11 +8,20 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "categories")
 public class Category{
     @SerializedName("@id")
-    @DatabaseField
+    @DatabaseField(id = true)
     private int idCategory;
     @SerializedName("$")
     @DatabaseField(columnName = "category_name", canBeNull = false)
     private String name;
 
     public Category(){}
+
+    public String getName() {
+        return name;
+    }
+
+
+    public int getIdCategory() {
+        return idCategory;
+    }
 }
