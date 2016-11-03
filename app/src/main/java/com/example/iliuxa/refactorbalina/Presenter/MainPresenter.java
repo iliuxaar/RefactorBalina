@@ -2,6 +2,7 @@ package com.example.iliuxa.refactorbalina.presenter;
 
 import android.os.AsyncTask;
 
+import com.example.iliuxa.refactorbalina.model.DataBase;
 import com.example.iliuxa.refactorbalina.pojo.Yml_catalog;
 import com.example.iliuxa.refactorbalina.view.MainActivityView;
 import com.stanfy.gsonxml.GsonXml;
@@ -24,6 +25,7 @@ public class MainPresenter implements MyPresenter{
 
     public MainPresenter(MainActivityView view){
         this.view = view;
+        dataBase = new DataBase();
     }
 
 
@@ -35,12 +37,12 @@ public class MainPresenter implements MyPresenter{
 
     @Override
     public void setItemsList() {
-        view.showData(catalog);
+        //view.showDataInGrid(dataBase.getCategoriesList());
     }
 
     @Override
     public void createNewWindow() {
-
+        //view.startNextActivity();
     }
 
     private String getHttpRequest(String path) throws IOException {
@@ -74,6 +76,9 @@ public class MainPresenter implements MyPresenter{
                 catalog = gsonXml.fromXml(
                         getHttpRequest("http://ufa.farfor.ru/getyml/?key=ukAXxeJYZN")
                         , Yml_catalog.class);
+                //dataBase.saveCategoriesToDataBase(catalog.getShop().getCategories());
+                //dataBase.saveDishesToDataBase(catalog.getShop().getOffers());
+                catalog.getClass();
 
             } catch (IOException e) {
                 e.printStackTrace();

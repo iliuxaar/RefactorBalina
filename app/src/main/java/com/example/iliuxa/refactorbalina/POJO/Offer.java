@@ -1,22 +1,21 @@
 package com.example.iliuxa.refactorbalina.pojo;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
+@DatabaseTable(tableName = "offers")
+public class Offer{
+    public static final String OFFER_COLUMN_CATEGORY_ID = "category_id";
 
-@Table(name = "Dishes")
-public class Offer extends Model{
-
-    @Column(name = "dish_name")
+    @DatabaseField(columnName = "offer_name")
     private String name;
-    @Column(name = "price")
+    @DatabaseField
     private String price;
-    @Column(name = "description")
+    @DatabaseField
     private String description;
-    @Column(name = "picture")
+    @DatabaseField
     private String picture;
-    @Column(name = "category_id")
+    @DatabaseField
     private int categoryId;
 
     public Offer(){

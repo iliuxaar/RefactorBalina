@@ -1,16 +1,8 @@
 package com.example.iliuxa.refactorbalina.model;
 
 
-import com.activeandroid.ActiveAndroid;
-import com.activeandroid.query.Select;
-import com.example.iliuxa.refactorbalina.pojo.Category;
-import com.example.iliuxa.refactorbalina.pojo.Offer;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class DataBase {
-    public void saveCategoriesToDataBase(ArrayList<Category> categories){
+    /*public void saveCategoriesToDataBase(ArrayList<Category> categories){
         ActiveAndroid.beginTransaction();
         for (int i = 0; i< categories.size(); i++){
             categories.get(i).save();
@@ -38,6 +30,7 @@ public class DataBase {
     public List<Category> getCategoriesList(){
         return new Select()
                 .from(Category.class)
+                .orderBy("RANDOM()")
                 .execute();
     }
 
@@ -46,5 +39,6 @@ public class DataBase {
                 .from(Offer.class)
                 .where(" = ?", id)
                 .executeSingle();
-    }
+        //todo: change there
+    }*/
 }

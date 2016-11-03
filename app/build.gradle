@@ -24,6 +24,10 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+def AAVersion = '4.1.0'
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -34,5 +38,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile group: 'com.stanfy', name: 'gson-xml-java', version: '0.1.7'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    apt "org.androidannotations:androidannotations:4.1.0"
+    compile "org.androidannotations:androidannotations-api:4.1.0"
+    compile group: 'com.j256.ormlite', name: 'ormlite-android', version: '5.0'
 }

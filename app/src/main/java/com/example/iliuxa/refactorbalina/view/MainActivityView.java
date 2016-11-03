@@ -1,11 +1,11 @@
 package com.example.iliuxa.refactorbalina.view;
 
-import com.example.iliuxa.refactorbalina.pojo.Yml_catalog;
+import java.util.List;
 
-/**
- * Created by Iliuxa on 28.10.16.
- */
+
 public interface MainActivityView {
-    void showData(Yml_catalog data);
-
+    void showDataInGrid(List data);
+    void showErrorDialog();
+    void showRetryDialog();
+    void startNextActivity(int categoryId);
 }

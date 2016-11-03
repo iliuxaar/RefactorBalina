@@ -1,17 +1,18 @@
 package com.example.iliuxa.refactorbalina.pojo;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 
-@Table(name = "Categories")
-public class Category extends Model{
+@DatabaseTable(tableName = "categories")
+public class Category{
     @SerializedName("@id")
-    @Column(name = "id_category")
+    @DatabaseField
     private int idCategory;
     @SerializedName("$")
-    @Column(name = "category_name")
+    @DatabaseField(columnName = "category_name", canBeNull = false)
     private String name;
+
+    public Category(){}
 }
