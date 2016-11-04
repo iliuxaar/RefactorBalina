@@ -7,7 +7,8 @@ import com.example.iliuxa.refactorbalina.application.MyApplication;
 import com.example.iliuxa.refactorbalina.model.DataBaseFactory;
 import com.example.iliuxa.refactorbalina.pojo.Category;
 import com.example.iliuxa.refactorbalina.pojo.Yml_catalog;
-import com.example.iliuxa.refactorbalina.view.CategoriesActivityView;
+import com.example.iliuxa.refactorbalina.presenter.interfaces.CategoriesActivityPresenter;
+import com.example.iliuxa.refactorbalina.view.interfaces.CategoriesActivityView;
 import com.stanfy.gsonxml.GsonXml;
 import com.stanfy.gsonxml.GsonXmlBuilder;
 import com.stanfy.gsonxml.XmlParserCreator;
@@ -81,11 +82,13 @@ public class CategoriesPresenter implements CategoriesActivityPresenter {
         protected List<Category> doInBackground(Void... params) {
             try {
                 if (DataBaseFactory.getHelper().isDataBaseEmpty()) {
-                    Yml_catalog catalog = getCatalog();
-                    DataBaseFactory.getHelper().getCategoryDAO().createWithCheck(catalog.getShop().getCategories());
-                    DataBaseFactory.getHelper().getOfferDao().createWithCheck(catalog.getShop().getOffers());
-                    return DataBaseFactory.getHelper().getCategoryDAO().getAllCategories();
-                }else return DataBaseFactory.getHelper().getCategoryDAO().getAllCategories();
+                    if(view.isNetworkAvailable()) {
+                        Yml_catalog catalog = getCatalog();
+                        DataBaseFactory.getHelper().getCategoryDAO().createWithCheck(catalog.getShop().getCategories());
+                        DataBaseFactory.getHelper().getOfferDao().createWithCheck(catalog.getShop().getOffers());
+                        return DataBaseFactory.getHelper().getCategoryDAO().getAllCategories();
+                    }else return null;
+                } else return DataBaseFactory.getHelper().getCategoryDAO().getAllCategories();
             } catch (SQLException e) {
                 throw new RuntimeException("Error with database");
             } catch (IOException e) {
@@ -94,12 +97,22 @@ public class CategoriesPresenter implements CategoriesActivityPresenter {
         }
 
         @Override
-        protected void onPreExecute()   {
+        protected void onPreExecute(){
+            view.showProgressDialog();
         }
 
         @Override
         protected void onPostExecute(List<Category> categories) {
-            setCategoriesInList(categories);
+            view.closeProgressDialog();
+            try {
+                if (categories != null) {
+                    setCategoriesInList(categories);
+                } else if (DataBaseFactory.getHelper().isDataBaseEmpty()) {
+                    view.showRetryDialog();
+                }
+            }catch (SQLException e){
+                throw new RuntimeException("Error with DataBase");
+            }
         }
     }
 

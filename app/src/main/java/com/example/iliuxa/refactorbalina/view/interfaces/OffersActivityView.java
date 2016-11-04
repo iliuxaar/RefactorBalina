@@ -1,4 +1,4 @@
-package com.example.iliuxa.refactorbalina.view;
+package com.example.iliuxa.refactorbalina.view.interfaces;
 
 import java.util.List;
 

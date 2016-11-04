@@ -10,6 +10,7 @@ import com.example.iliuxa.refactorbalina.R;
 import com.example.iliuxa.refactorbalina.adapter.MyAdapter;
 import com.example.iliuxa.refactorbalina.model.DataBaseFactory;
 import com.example.iliuxa.refactorbalina.presenter.OffersPresenter;
+import com.example.iliuxa.refactorbalina.view.interfaces.OffersActivityView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EActivity(R.layout.activity_offers)
-public class OffersActivity extends AppCompatActivity implements OffersActivityView{
+public class OffersActivity extends AppCompatActivity implements OffersActivityView {
 
     private final int LAYOUT_RESOURCE =  R.layout.simple_offer_list_item;
     private final OffersPresenter presenter = new OffersPresenter(this);

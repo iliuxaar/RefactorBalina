@@ -4,13 +4,14 @@ import android.os.AsyncTask;
 
 import com.example.iliuxa.refactorbalina.model.DataBaseFactory;
 import com.example.iliuxa.refactorbalina.pojo.Offer;
-import com.example.iliuxa.refactorbalina.view.OffersActivityView;
+import com.example.iliuxa.refactorbalina.presenter.interfaces.OffersActivityPresenter;
+import com.example.iliuxa.refactorbalina.view.interfaces.OffersActivityView;
 
 import java.sql.SQLException;
 import java.util.List;
 
 
-public class OffersPresenter implements OffersActivityPresenter{
+public class OffersPresenter implements OffersActivityPresenter {
     private OffersActivityView view;
 
     public OffersPresenter(OffersActivityView view){
