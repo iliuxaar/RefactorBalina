@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.iliuxa.refactorbalina.R;
 import com.example.iliuxa.refactorbalina.viewHolders.CategoryResources;
-import com.example.iliuxa.refactorbalina.viewHolders.DishesResources;
+import com.example.iliuxa.refactorbalina.viewHolders.OfferResources;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 return new CategoryResources(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.simple_category_list_item, parent, false),mContext);
             case TYPE_DISHES:
-                return new DishesResources(LayoutInflater.from(parent.getContext())
+                return new OfferResources(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.simple_offer_list_item, parent, false),mContext);
         }
         return null;
@@ -46,7 +46,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 ((CategoryResources) holder).bind(mData.get(position));
                 break;
             case TYPE_DISHES:
-                ((DishesResources) holder).bind(mData.get(position));
+                ((OfferResources) holder).bind(mData.get(position));
                 break;
         }
     }

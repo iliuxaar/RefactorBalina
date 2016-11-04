@@ -1,9 +1,12 @@
 package com.example.iliuxa.refactorbalina.presenter;
 
+import com.example.iliuxa.refactorbalina.pojo.Offer;
+
 import java.sql.SQLException;
+import java.util.List;
 
 
 public interface OffersActivityPresenter {
-    public void setOffersInList(int id) throws SQLException;
+    void setOffersInList(List<Offer> data) throws SQLException;
     void getDataForList(int id) throws SQLException;
 }

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.iliuxa.refactorbalina.application.MyApplication;
 import com.example.iliuxa.refactorbalina.model.DataBaseFactory;
+import com.example.iliuxa.refactorbalina.pojo.Category;
 import com.example.iliuxa.refactorbalina.pojo.Yml_catalog;
 import com.example.iliuxa.refactorbalina.view.CategoriesActivityView;
 import com.stanfy.gsonxml.GsonXml;
@@ -17,6 +18,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -25,20 +27,21 @@ import okhttp3.Response;
 public class CategoriesPresenter implements CategoriesActivityPresenter {
     private CategoriesActivityView view;
     private Yml_catalog catalog;
+    private final String URL = "http://ufa.farfor.ru/getyml/?key=ukAXxeJYZN";
 
     public CategoriesPresenter(CategoriesActivityView view){
         this.view = view;
     }
 
     @Override
-    public void setCategoriesInList() throws SQLException{
-        view.showCategoriesList(DataBaseFactory.getHelper().getCategoryDAO().getAllCategories());
+    public void setCategoriesInList(List<Category> categories){
+        view.showCategoriesList(categories);
     }
 
     @Override
     public void getDataForList() {
-        DownloadDataBase test = new DownloadDataBase();
-        test.execute();
+        LoadDataBase load =new LoadDataBase();
+        load.execute();
     }
 
     private String getHttpRequest(String path) throws IOException {
@@ -65,28 +68,29 @@ public class CategoriesPresenter implements CategoriesActivityPresenter {
         return parserCreator;
     }
 
-    private class DownloadDataBase extends AsyncTask<Void, Void, Void> {
+    private Yml_catalog getCatalog() throws IOException {
+        GsonXml gsonXml = new GsonXmlBuilder()
+                .setXmlParserCreator(getXmlPullParser())
+                .create();
+        return gsonXml.fromXml(getHttpRequest(URL), Yml_catalog.class);
+    }
+
+    private class LoadDataBase extends AsyncTask<Void, Void, List<Category>> {
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected List<Category> doInBackground(Void... params) {
             try {
                 if (DataBaseFactory.getHelper().isDataBaseEmpty()) {
-                    GsonXml gsonXml = new GsonXmlBuilder()
-                            .setXmlParserCreator(getXmlPullParser())
-                            .create();
-                    catalog = gsonXml
-                            .fromXml(getHttpRequest("http://ufa.farfor.ru/getyml/?key=ukAXxeJYZN"), Yml_catalog.class);
+                    Yml_catalog catalog = getCatalog();
                     DataBaseFactory.getHelper().getCategoryDAO().createWithCheck(catalog.getShop().getCategories());
                     DataBaseFactory.getHelper().getOfferDao().createWithCheck(catalog.getShop().getOffers());
-                }else return null;
+                    return DataBaseFactory.getHelper().getCategoryDAO().getAllCategories();
+                }else return DataBaseFactory.getHelper().getCategoryDAO().getAllCategories();
             } catch (SQLException e) {
-                Log.e(MyApplication.TAG, "Error with database");
-                throw new RuntimeException();
+                throw new RuntimeException("Error with database");
             } catch (IOException e) {
-                Log.e(MyApplication.TAG, "Parce Error");
-                throw new RuntimeException();
+                throw new RuntimeException("Parce Error");
             }
-            return null;
         }
 
         @Override
@@ -94,12 +98,8 @@ public class CategoriesPresenter implements CategoriesActivityPresenter {
         }
 
         @Override
-        protected void onPostExecute(Void Void) {
-            try {
-                setCategoriesInList();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        protected void onPostExecute(List<Category> categories) {
+            setCategoriesInList(categories);
         }
     }
 

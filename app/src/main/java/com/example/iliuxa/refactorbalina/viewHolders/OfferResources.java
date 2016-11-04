@@ -10,7 +10,7 @@ import com.example.iliuxa.refactorbalina.pojo.Offer;
 import com.squareup.picasso.Picasso;
 
 
-public class DishesResources extends MyViewHolder {
+public class OfferResources extends MyViewHolder {
     private TextView mOfferName;
     private ImageView mOfferImage;
     private TextView mOfferPrice;
@@ -18,7 +18,7 @@ public class DishesResources extends MyViewHolder {
     private Context mContext;
 
 
-    public DishesResources(View itemView, Context context) {
+    public OfferResources(View itemView, Context context) {
         super(itemView);
         mContext = context;
         mOfferName = (TextView)itemView.findViewById(R.id.offerNameText);
@@ -32,10 +32,11 @@ public class DishesResources extends MyViewHolder {
         mOfferName.setText(((Offer)data).getName());
         mOfferPrice.setText(((Offer)data).getPrice());
         mOfferDescription.setText(((Offer)data).getDescription());
-        Picasso.with(mContext)
-                .load(((Offer)data).getPicture())
-                .resize(400,300)
-                .into(mOfferImage);
+            Picasso.with(mContext)
+                    .load(((Offer)data).getPicture())
+                    .resize(400, 300)
+                    .into(mOfferImage);
+
     }
 }
 

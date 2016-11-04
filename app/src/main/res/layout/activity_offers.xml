@@ -4,7 +4,8 @@
     android:id="@+id/activity_offers"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.iliuxa.refactorbalina.view.OffersActivity">
+    tools:context="com.example.iliuxa.refactorbalina.view.OffersActivity"
+    android:background="@drawable/list_background">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
