@@ -2,7 +2,7 @@ package com.example.iliuxa.refactorbalina.application;
 
 import android.app.Application;
 
-import com.example.iliuxa.refactorbalina.model.HelperFactory;
+import com.example.iliuxa.refactorbalina.model.DataBaseFactory;
 
 
 public class MyApplication extends Application {
@@ -11,6 +11,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        HelperFactory.setHelper(getApplicationContext());
+        DataBaseFactory.setHelper(getApplicationContext());
     }
 }

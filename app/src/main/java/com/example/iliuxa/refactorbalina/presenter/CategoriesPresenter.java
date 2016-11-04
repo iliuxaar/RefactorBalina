@@ -4,10 +4,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.iliuxa.refactorbalina.application.MyApplication;
-import com.example.iliuxa.refactorbalina.model.DataBase;
-import com.example.iliuxa.refactorbalina.model.HelperFactory;
+import com.example.iliuxa.refactorbalina.model.DataBaseFactory;
 import com.example.iliuxa.refactorbalina.pojo.Yml_catalog;
-import com.example.iliuxa.refactorbalina.view.MainActivityView;
+import com.example.iliuxa.refactorbalina.view.CategoriesActivityView;
 import com.stanfy.gsonxml.GsonXml;
 import com.stanfy.gsonxml.GsonXmlBuilder;
 import com.stanfy.gsonxml.XmlParserCreator;
@@ -23,31 +22,23 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainPresenter implements MyPresenter{
-    MainActivityView view;
-    DataBase dataBase;
-    Yml_catalog catalog;
+public class CategoriesPresenter implements CategoriesActivityPresenter {
+    private CategoriesActivityView view;
+    private Yml_catalog catalog;
 
-    public MainPresenter(MainActivityView view){
+    public CategoriesPresenter(CategoriesActivityView view){
         this.view = view;
-        dataBase = new DataBase();
     }
 
+    @Override
+    public void setCategoriesInList() throws SQLException{
+        view.showCategoriesList(DataBaseFactory.getHelper().getCategoryDAO().getAllCategories());
+    }
 
-    public void saveData(){
+    @Override
+    public void getDataForList() {
         DownloadDataBase test = new DownloadDataBase();
         test.execute();
-    }
-
-
-    @Override
-    public void setItemsList() throws SQLException{
-        view.showDataInGrid(HelperFactory.getHelper().getCategoryDAO().getAllCategories());
-    }
-
-    @Override
-    public void createNewWindow() {
-        //view.startNextActivity();
     }
 
     private String getHttpRequest(String path) throws IOException {
@@ -79,14 +70,14 @@ public class MainPresenter implements MyPresenter{
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                if (HelperFactory.getHelper().isDataBaseEmpty()) {
+                if (DataBaseFactory.getHelper().isDataBaseEmpty()) {
                     GsonXml gsonXml = new GsonXmlBuilder()
                             .setXmlParserCreator(getXmlPullParser())
                             .create();
                     catalog = gsonXml
                             .fromXml(getHttpRequest("http://ufa.farfor.ru/getyml/?key=ukAXxeJYZN"), Yml_catalog.class);
-                    HelperFactory.getHelper().getCategoryDAO().createWithCheck(catalog.getShop().getCategories());
-                    HelperFactory.getHelper().getOfferDAO().createWithCheck(catalog.getShop().getOffers());
+                    DataBaseFactory.getHelper().getCategoryDAO().createWithCheck(catalog.getShop().getCategories());
+                    DataBaseFactory.getHelper().getOfferDao().createWithCheck(catalog.getShop().getOffers());
                 }else return null;
             } catch (SQLException e) {
                 Log.e(MyApplication.TAG, "Error with database");
@@ -105,7 +96,7 @@ public class MainPresenter implements MyPresenter{
         @Override
         protected void onPostExecute(Void Void) {
             try {
-                setItemsList();
+                setCategoriesInList();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

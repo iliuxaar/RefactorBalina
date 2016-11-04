@@ -1,4 +1,4 @@
-package com.example.iliuxa.refactorbalina.adapter;
+package com.example.iliuxa.refactorbalina.viewHolders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

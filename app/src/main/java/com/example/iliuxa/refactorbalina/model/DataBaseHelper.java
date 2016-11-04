@@ -14,24 +14,21 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
-/**
- * Created by Iliuxa on 03.11.16.
- */
 
 public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
     public static final String TAG = DataBaseHelper.class.getSimpleName();
     private static final String DATABASE_NAME = "shop.db";
     private static final int DATABASE_VERSION = 1;
 
-    private CategoryDao catDao;
-    private OfferDao offerDao;
+    private CategoryDao mCategoryDao;
+    private OfferDao mOfferDao;
 
     public DataBaseHelper(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
     }
 
 
-    //Creating table
+    /**Creating table*/
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try{
@@ -48,30 +45,31 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
         //empty for this task
     }
 
-    //Singleton for categoryDao
+    /**Singleton for categoryDao*/
     public CategoryDao getCategoryDAO()throws SQLException{
-        if(catDao == null){
-            catDao = new CategoryDao(getConnectionSource(), Category.class);
+        if(mCategoryDao == null){
+            mCategoryDao = new CategoryDao(getConnectionSource(), Category.class);
         }
-        return catDao;
+        return mCategoryDao;
     }
 
-    //Singleton for OfferDao
-    public OfferDao getOfferDAO()throws SQLException{
-        if(offerDao == null){
-            offerDao = new OfferDao(getConnectionSource(), Offer.class);
+    /**Singleton for mOfferDao*/
+    public OfferDao getOfferDao()throws SQLException{
+        if(mOfferDao == null){
+            mOfferDao = new OfferDao(getConnectionSource(), Offer.class);
         }
-        return offerDao;
+        return mOfferDao;
     }
 
+    /**Check for empty DataBase*/
     public boolean isDataBaseEmpty()throws SQLException{
-        return getCategoryDAO().getAllCategories().size() == 0 || getOfferDAO().getAllOffers().size() == 0;
+        return getCategoryDAO().getAllCategories().size() == 0 || getOfferDao().getAllOffers().size() == 0;
     }
 
     @Override
     public void close() {
         super.close();
-        catDao = null;
-        offerDao = null;
+        mCategoryDao = null;
+        mOfferDao = null;
     }
 }

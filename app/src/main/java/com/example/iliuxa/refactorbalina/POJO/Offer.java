@@ -24,7 +24,7 @@ public class Offer{
     @DatabaseField
     private String picture;
 
-    @DatabaseField
+    @DatabaseField(columnName = "category_id")
     private int categoryId;
 
     public Offer(){

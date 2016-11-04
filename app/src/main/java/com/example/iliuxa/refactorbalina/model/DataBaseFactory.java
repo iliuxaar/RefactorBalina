@@ -6,7 +6,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 
 
-public class HelperFactory {
+public class DataBaseFactory {
     private static DataBaseHelper dataBaseHelper;
 
     public static DataBaseHelper getHelper(){

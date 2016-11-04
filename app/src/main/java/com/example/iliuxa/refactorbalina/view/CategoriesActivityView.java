@@ -3,9 +3,9 @@ package com.example.iliuxa.refactorbalina.view;
 import java.util.List;
 
 
-public interface MainActivityView {
-    void showDataInGrid(List data);
+public interface CategoriesActivityView {
+    void showCategoriesList(List data);
     void showErrorDialog();
     void showRetryDialog();
-    void startNextActivity(int categoryId);
+    void startOfferActivity(int categoryId);
 }
