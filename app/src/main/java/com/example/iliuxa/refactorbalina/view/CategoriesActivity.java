@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.example.iliuxa.refactorbalina.R;
 import com.example.iliuxa.refactorbalina.adapter.MyAdapter;
+import com.example.iliuxa.refactorbalina.model.DataBaseFactory;
 import com.example.iliuxa.refactorbalina.pojo.Category;
 import com.example.iliuxa.refactorbalina.presenter.CategoriesPresenter;
 import com.example.iliuxa.refactorbalina.view.interfaces.CategoriesActivityView;
@@ -129,5 +130,11 @@ public class CategoriesActivity extends AppCompatActivity implements CategoriesA
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DataBaseFactory.releaseHelper();
     }
 }

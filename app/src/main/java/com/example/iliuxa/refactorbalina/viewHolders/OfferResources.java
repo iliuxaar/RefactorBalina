@@ -34,6 +34,7 @@ public class OfferResources extends MyViewHolder {
         mOfferDescription.setText(((Offer)data).getDescription());
             Picasso.with(mContext)
                     .load(((Offer)data).getPicture())
+                    .error(R.drawable.downloading)
                     .resize(400, 300)
                     .into(mOfferImage);
 
