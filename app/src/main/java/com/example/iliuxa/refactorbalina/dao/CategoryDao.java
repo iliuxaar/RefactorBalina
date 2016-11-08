@@ -19,10 +19,13 @@ public class CategoryDao extends BaseDaoImpl<Category,Integer>{
         super(connectionSource,dataClass);
     }
 
+
+    /**Get List of categories*/
     public List<Category> getAllCategories()throws SQLException{
         return this.queryForAll();
     }
 
+    /**Add field to DataBase with check for existing*/
     public int createWithCheck(Collection<Category> datas) throws SQLException {
         for(Category data:datas){
             Category category = this.queryForId(data.getIdCategory());

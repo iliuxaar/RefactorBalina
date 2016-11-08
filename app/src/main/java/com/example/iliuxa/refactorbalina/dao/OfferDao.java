@@ -19,6 +19,8 @@ public class OfferDao extends BaseDaoImpl<Offer,Integer> {
         super(connectionSource, dataClass);
     }
 
+
+    /**Get List of offers with same Id*/
     public List<Offer> getOffersByCategoryId(Integer categoryId)throws SQLException{
         QueryBuilder<Offer,Integer> queryBuilder = queryBuilder();
         queryBuilder.where().eq(Offer.OFFER_COLUMN_CATEGORY_ID,categoryId);
@@ -26,10 +28,12 @@ public class OfferDao extends BaseDaoImpl<Offer,Integer> {
         return query(preparedQuery);
     }
 
+    /**Get List with all offers*/
     public List<Offer> getAllOffers()throws SQLException{
         return this.queryForAll();
     }
 
+    /**Add field to DataBase with check for existing*/
     public int createWithCheck(Collection<Offer> datas) throws SQLException {
         for(Offer data:datas){
             Offer offer = this.queryForId(data.getId());
